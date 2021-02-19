@@ -12,6 +12,8 @@ SRC_DIR   = ./src/
 SRC_FILES =	strlen.asm		\
 			lib.asm			\
 			strchr.asm		\
+			memset.asm		\
+			memcpy.asm		\
 
 SRC 	= $(addprefix $(SRC_DIR), $(SRC_FILES))
 
@@ -31,7 +33,7 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@
 
 test: $(NAME)
-	gcc -W -Wall -Wextra tests/main.c -o $(TEST_NAME) -ldl
+	gcc -W -Wall -Wextra tests/main.c -g -o $(TEST_NAME) -ldl
 
 tests_run: test
 	LD_PRELOAD=./libasm.so ./$(TEST_NAME)

@@ -16,6 +16,7 @@ STDERR equ 2
 %endmacro
 
 %macro print 1
+    mov rax, %1 
     push rax
     mov rbx, 0
 %%printLoop:

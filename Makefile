@@ -11,6 +11,7 @@ cc = ld
 SRC_DIR   = ./src/
 SRC_FILES =	strlen.asm		\
 			lib.asm			\
+			strchr.asm		\
 
 SRC 	= $(addprefix $(SRC_DIR), $(SRC_FILES))
 

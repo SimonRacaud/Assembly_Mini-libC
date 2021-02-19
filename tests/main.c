@@ -15,6 +15,7 @@ size_t (*_strlen)(const char *str);
 char *(*_strchr)(const char *, int c);
 void *(*_memset)(void *, int c, size_t n);
 void *(*_memcpy)(void *, void *, size_t n);
+int (*_strcmp)(char *, char *);
 
 void tests_strlen(void)
 {
@@ -57,6 +58,15 @@ void tests_memcpy(void)
     printf("memcpy('Oxx') = %s \n", (char *) _memcpy(buf, "O", 1));
 }
 
+void tests_strcmp(void)
+{
+    printf("strcmp(aa, aa) == %d / 0 \n", _strcmp("aa", "aa"));
+    printf("strcmp(aa, ab) == %d / -1 \n", _strcmp("aa", "ab"));
+    printf("strcmp(abc, ab) == %d / 1 \n", _strcmp("abc", "ab"));
+    printf("strcmp(, ) == %d / 0 \n", _strcmp("", ""));
+    printf("strcmp(ab, abc) == %d / -1 \n", _strcmp("ab", "abc"));
+}
+
 int main(void)
 {
     void *lib = dlopen("./libasm.so", RTLD_LAZY);
@@ -67,11 +77,13 @@ int main(void)
     *(char **) (&_strchr) = dlsym(lib, "strchr");
     *(void **) (&_memset) = dlsym(lib, "memset");
     *(void **) (&_memcpy) = dlsym(lib, "memcpy");
+    *(int **) (&_strcmp) = dlsym(lib, "strcmp");
 
     // tests_strlen();
     // tests_strchr();
     // tests_memset();
     // tests_memcpy();
+    tests_strcmp();
 
     return 0;
 }

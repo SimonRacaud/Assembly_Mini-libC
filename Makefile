@@ -15,13 +15,14 @@ SRC_FILES =	strlen.asm		\
 			memset.asm		\
 			memcpy.asm		\
 			strcmp.asm		\
+			memmove.asm		\
 
 SRC 	= $(addprefix $(SRC_DIR), $(SRC_FILES))
 
 NAME=libasm.so
 TEST_NAME=test.out
 
-CFLAGS = -fPIC -shared
+CFLAGS = -fPIC -shared -g
 ASFLAGS=-f elf64
 LDFLAGS=
 #LIBFLAGS=-shared

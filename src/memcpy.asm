@@ -3,7 +3,6 @@ BITS 64
 global memcpy
 
 section .text
-
 memcpy:
     xor rcx, rcx
 _loop:

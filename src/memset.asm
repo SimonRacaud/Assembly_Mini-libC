@@ -18,6 +18,7 @@ _loop:
 
 _end:
     mov rax, rdi
+    ret
 
 ; void *memset(void *s, int c, size_t n) {
 ;     for (size_t i = 0; i < n; i++) {

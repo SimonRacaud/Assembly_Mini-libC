@@ -17,6 +17,7 @@ void *(*_memset)(void *, int c, size_t n);
 void *(*_memcpy)(void *, void *, size_t n);
 int (*_strcmp)(char *, char *);
 void *(*_memmove)(void *, void *, size_t);
+int (*_strncmp)(char *, char *, size_t);
 
 void tests_strlen(void)
 {
@@ -42,7 +43,7 @@ void tests_memset(void)
 {
     char buf[1024] = {0};
 
-    printf("memset('xxx') = %s \n", (char *) _memset((void *) buf, 'x', 3));
+    printf("memset('xxx') = %s \n", (char *) _memset(buf, 'x', 3));
     printf("memset('llllllllll') = %s \n",
         (char *) _memset((void *) buf, 'l', 10));
     printf("memset('llllllllll') = %s \n",
@@ -75,7 +76,6 @@ void tests_memmove1(void)
     void *dest = (void *) (buf + 1);
     char *res = (char *) _memmove(dest, src, 7 * sizeof(char));
 
-    // res[0] = ' ';
     printf("memmove() == (%s) / (abcdefg) \n", res);
 }
 
@@ -99,6 +99,11 @@ void tests_memmove3(void)
     printf("memmove() == (%s) / (abcdefg_) \n", res);
 }
 
+void tests_strncmp(void)
+{
+    printf("%d == %d \n", strncmp("", "", 8), strncmp("", "", 8));
+}
+
 int main(void)
 {
     void *lib = dlopen("./libasm.so", RTLD_LAZY);
@@ -111,15 +116,19 @@ int main(void)
     *(void **) (&_memcpy) = dlsym(lib, "memcpy");
     *(int **) (&_strcmp) = dlsym(lib, "strcmp");
     *(void **) (&_memmove) = dlsym(lib, "memmove");
+    *(int **) (&_strncmp) = dlsym(lib, "strncmp");
 
-    // tests_strlen();
-    // tests_strchr();
-    // tests_memset();
-    // tests_memcpy();
-    // tests_strcmp();
-    // tests_memmove1();
-    // tests_memmove2();
-    // tests_memmove3();
-
+    if (!_memset)
+        return 1;
+    tests_strlen();
+    tests_strchr();
+    tests_memset();
+    tests_memcpy();
+    tests_strcmp();
+    tests_memmove1();
+    tests_memmove2();
+    tests_memmove3();
+    tests_strncmp();
+    dlclose(lib);
     return 0;
 }

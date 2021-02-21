@@ -13,17 +13,20 @@ SRC_FILES =	strlen.asm		\
 			lib.asm			\
 			strchr.asm		\
 			memset.asm		\
-			memcpy.asm		\
-			strcmp.asm		\
+			strncmp.asm		\
 			memmove.asm		\
+			strcmp.asm		\
+			memcpy.asm		\
 
 SRC 	= $(addprefix $(SRC_DIR), $(SRC_FILES))
+
+SRC_UT = tests/tests_project.c
 
 NAME=libasm.so
 TEST_NAME=test.out
 
 CFLAGS = -fPIC -shared -g
-ASFLAGS=-f elf64
+ASFLAGS=-f elf64 -g
 LDFLAGS=
 #LIBFLAGS=-shared
 
@@ -34,12 +37,11 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@
 
-test: $(NAME)
+tests_main: re
 	gcc -W -Wall -Wextra tests/main.c -g -o $(TEST_NAME) -ldl
 
-tests_run: test
-	LD_PRELOAD=./libasm.so ./$(TEST_NAME)
-	rm -f $(TEST_NAME)
+tests_run: fclean all
+	@gcc  -W -Wall -Wextra $(SRC_UT) -o $(TEST_NAME) -ldl -lcriterion && ./$(TEST_NAME)
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@

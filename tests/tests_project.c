@@ -23,6 +23,7 @@ int (*_strncmp)(char *, char *, size_t);
 int (*_strcasecmp)(char *, char *);
 char *(*_rindex)(char *, int);
 char *(*_strstr)(char *, char *);
+char *(*_strpbrk)(char *, char *);
 
 void *lib = NULL;
 
@@ -73,7 +74,7 @@ Test(memset, t01, .init = setup, .fini = teardown)
 
     cr_assert_str_eq(_memset(buf, 'x', 3), memset(buf2, 'x', 3));
     cr_assert_str_eq(_memset(buf, 'l', 10), memset(buf2, 'l', 10));
-    cr_assert_str_eq(_memset(buf, 'z', 0), memset(buf2, 'z', 0));
+    cr_assert_str_eq(_memset(buf, 'z', 0), buf2);
     cr_assert_str_eq(_memset(buf, 'y', 5), memset(buf2, 'y', 5));
 }
 
@@ -162,4 +163,15 @@ Test(strstr, t01, .init = setup, .fini = teardown)
     cr_expect_eq(_strstr("abcde", "cc"), strstr("abcde", "cc"));
     cr_expect_eq(_strstr("", "cc"), strstr("", "cc"));
     cr_expect_str_eq(_strstr("abccde", "c"), strstr("abccde", "c"));
+}
+
+Test(strpbrk, t01, .init = setup, .fini = teardown)
+{
+    *(char **) (&_strpbrk) = dlsym(lib, "strpbrk");
+    cr_expect_str_eq(_strpbrk("efgc", "abc"), strpbrk("efgc", "abc"));
+    cr_expect_str_eq(_strpbrk("efgc", "pfg"), strpbrk("efgc", "pfg"));
+    cr_expect_str_eq(_strpbrk("eagc", "a"), strpbrk("eagc", "a"));
+    cr_expect_eq(_strpbrk("", "a"), strpbrk("", "a"));
+    cr_expect_eq(_strpbrk("", ""), strpbrk("", ""));
+    cr_expect_eq(_strpbrk("eagc", "zui"), strpbrk("eagc", "zui"));
 }

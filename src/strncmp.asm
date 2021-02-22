@@ -14,7 +14,7 @@ _loop:
     cmp BYTE [rsi + rcx], 0
     je _end_eq
 
-_continue
+_continue:
     mov r8b, [rsi + rcx]
     cmp BYTE [rdi + rcx], r8b
     jg _end_great

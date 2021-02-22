@@ -17,5 +17,5 @@ _strlen_loop:
 
     cmp BYTE [rdi], 0 ; *str != '\0' : loop
     jne _strlen_loop
-_strlen_stop
+_strlen_stop:
     ret

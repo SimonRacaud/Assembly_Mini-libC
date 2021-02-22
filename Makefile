@@ -6,7 +6,7 @@
 ##
 
 AS = nasm
-cc = ld
+LD = ld
 
 SRC_DIR   = ./src/
 SRC_FILES =	strlen.asm		\
@@ -25,20 +25,19 @@ SRC_UT = tests/tests_project.c
 NAME=libasm.so
 TEST_NAME=test.out
 
-CFLAGS = -fPIC -shared -g
-ASFLAGS=-f elf64 -g
+CFLAGS = -fPIC -shared
+ASFLAGS=-f elf64
 LDFLAGS=
-#LIBFLAGS=-shared
 
 OBJ=$(SRC:.asm=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@
+	$(LD) $(CFLAGS) $(OBJ) -o $@
 
 tests_main: re
-	gcc -W -Wall -Wextra tests/main.c -g -o $(TEST_NAME) -ldl
+	gcc -W -Wall -Wextra tests/main.c -o $(TEST_NAME) -ldl
 
 tests_run: fclean all
 	@gcc  -W -Wall -Wextra $(SRC_UT) -o $(TEST_NAME) -ldl -lcriterion && ./$(TEST_NAME)

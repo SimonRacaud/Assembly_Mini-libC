@@ -21,6 +21,8 @@ int (*_strcmp)(char *, char *);
 void *(*_memmove)(void *, void *, size_t);
 int (*_strncmp)(char *, char *, size_t);
 int (*_strcasecmp)(char *, char *);
+char *(*_rindex)(char *, int);
+char *(*_strstr)(char *, char *);
 
 void *lib = NULL;
 
@@ -137,4 +139,27 @@ Test(strcasecmp, t01, .init = setup, .fini = teardown)
     cr_assert_eq(_strcasecmp("", ""), strcasecmp("", ""));
     cr_assert_eq(_strcasecmp("aB", "abc") < 0, strcasecmp("aB", "abc") < 0);
     cr_assert_eq(_strcasecmp("abC", "ab") < 0, strcasecmp("abC", "ab") < 0);
+}
+
+Test(rindex, t01, .init = setup, .fini = teardown)
+{
+    *(char ***) (&_rindex) = dlsym(lib, "rindex");
+    cr_expect_eq(_rindex("abcde", 'a'), rindex("abcde", 'a'));
+    cr_expect_eq(_rindex("abcde", 'e'), rindex("abcde", 'e'));
+    cr_assert_eq(_rindex("abcde", 'c'), rindex("abcde", 'c'));
+    cr_assert_eq(_rindex("abcde", 'x'), rindex("abcde", 'x'));
+    cr_assert_eq(_rindex("abcde", '\0'), rindex("abcde", '\0'));
+    cr_assert_eq(_rindex("", 'x'), rindex("", 'x'));
+    cr_assert_eq(_rindex("", '\0'), rindex("", '\0'));
+}
+
+Test(strstr, t01, .init = setup, .fini = teardown)
+{
+    *(char **) (&_strstr) = dlsym(lib, "strstr");
+    cr_expect_str_eq(_strstr("cc", "cc"), strstr("cc", "cc"));
+    cr_expect_str_eq(_strstr("acc", "cc"), strstr("acc", "cc"));
+    cr_expect_str_eq(_strstr("abccde", "cc"), strstr("abccde", "cc"));
+    cr_expect_eq(_strstr("abcde", "cc"), strstr("abcde", "cc"));
+    cr_expect_eq(_strstr("", "cc"), strstr("", "cc"));
+    cr_expect_str_eq(_strstr("abccde", "c"), strstr("abccde", "c"));
 }

@@ -1,6 +1,3 @@
-
-%include "src/lib.asm"
-
 BITS 64
 global strlen
 

@@ -10,7 +10,6 @@ LD = ld
 
 SRC_DIR   = ./src/
 SRC_FILES =	strlen.asm		\
-			lib.asm			\
 			strchr.asm		\
 			memset.asm		\
 			strncmp.asm		\

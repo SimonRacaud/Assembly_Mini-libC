@@ -20,14 +20,9 @@ void *(*_memcpy)(void *, void *, size_t n);
 int (*_strcmp)(char *, char *);
 void *(*_memmove)(void *, void *, size_t);
 int (*_strncmp)(char *, char *, size_t);
+int (*_strcasecmp)(char *, char *);
 
 void *lib = NULL;
-
-void redirect_all_stdout(void)
-{
-    cr_redirect_stdout();
-    cr_redirect_stderr();
-}
 
 void setup(void)
 {
@@ -49,11 +44,6 @@ void teardown(void)
 {
     // dlclose(lib);
 }
-
-// Test(function, t01, .init = redirect_all_stdout)
-// {
-//     cr_assert_stderr_eq_str("");
-// }
 
 Test(strlen, t01, .init = setup, .fini = teardown)
 {
@@ -137,4 +127,14 @@ Test(strncmp, t01, .init = setup, .fini = teardown)
     cr_assert_eq(_strncmp("a", "b", 1), strncmp("a", "b", 1));
     cr_assert_eq(_strncmp("ac", "a", 3) > 0, strncmp("ac", "a", 3) > 0);
     cr_assert_eq(_strncmp("ac", "acd", 2), strncmp("ac", "acd", 2));
+}
+
+Test(strcasecmp, t01, .init = setup, .fini = teardown)
+{
+    *(int **) (&_strcasecmp) = dlsym(lib, "strcasecmp");
+    cr_assert_eq(_strcasecmp("Aa", "aa"), strcasecmp("Aa", "aa"));
+    cr_assert_eq(_strcasecmp("aa", "aA"), strcasecmp("aa", "aA"));
+    cr_assert_eq(_strcasecmp("", ""), strcasecmp("", ""));
+    cr_assert_eq(_strcasecmp("aB", "abc") < 0, strcasecmp("aB", "abc") < 0);
+    cr_assert_eq(_strcasecmp("abC", "ab") < 0, strcasecmp("abC", "ab") < 0);
 }

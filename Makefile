@@ -17,6 +17,7 @@ SRC_FILES =	strlen.asm		\
 			memmove.asm		\
 			strcmp.asm		\
 			memcpy.asm		\
+			strcasecmp.asm	\
 
 SRC 	= $(addprefix $(SRC_DIR), $(SRC_FILES))
 

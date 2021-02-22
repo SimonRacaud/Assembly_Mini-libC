@@ -10,12 +10,11 @@ _loop:
     cmp rcx, rdx ; i == n : stop
     je  _end
 
-    mov [rdi + rcx], rsi ; s[i] = c
+    mov [rdi + rcx], sil ; s[i] = c
 
     inc rcx ; i++
 
     jmp _loop
-
 _end:
     mov rax, rdi
     ret
@@ -25,4 +24,4 @@ _end:
 ;         s[i] = c;
 ;     }
 ;     return s;
-; }
+; } 

@@ -81,7 +81,8 @@ Test(memset, t01, .init = setup, .fini = teardown)
 
     cr_assert_str_eq(_memset(buf, 'x', 3), memset(buf2, 'x', 3));
     cr_assert_str_eq(_memset(buf, 'l', 10), memset(buf2, 'l', 10));
-    cr_assert_str_eq(_memset(buf, 'x', 0), memset(buf2, 'x', 0));
+    cr_assert_str_eq(_memset(buf, 'z', 0), memset(buf2, 'z', 0));
+    cr_assert_str_eq(_memset(buf, 'y', 5), memset(buf2, 'y', 5));
 }
 
 Test(memcpy, t01, .init = setup, .fini = teardown)

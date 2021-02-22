@@ -24,6 +24,7 @@ int (*_strcasecmp)(char *, char *);
 char *(*_rindex)(char *, int);
 char *(*_strstr)(char *, char *);
 char *(*_strpbrk)(char *, char *);
+size_t (*_strcspn)(char *, char *);
 
 void *lib = NULL;
 
@@ -174,4 +175,18 @@ Test(strpbrk, t01, .init = setup, .fini = teardown)
     cr_expect_eq(_strpbrk("", "a"), strpbrk("", "a"));
     cr_expect_eq(_strpbrk("", ""), strpbrk("", ""));
     cr_expect_eq(_strpbrk("eagc", "zui"), strpbrk("eagc", "zui"));
+}
+
+Test(strcspn, t01, .init = setup, .fini = teardown)
+{
+    *(size_t **) (&_strcspn) = dlsym(lib, "strcspn");
+
+    printf("%lu \n", strcspn("zzaabbbcc", "ac"));
+    cr_expect_eq(_strcspn("aabbbcc", "ac"), strcspn("aabbbcc", "ac"));
+    cr_expect_eq(_strcspn("aabcc", "ac"), strcspn("aabcc", "ac"));
+    cr_expect_eq(_strcspn("aabcc", "c"), strcspn("aabcc", "c"));
+    cr_expect_eq(_strcspn("aabcc", "a"), strcspn("aabcc", "a"));
+    cr_expect_eq(_strcspn("", "a"), strcspn("", "a"));
+    cr_expect_eq(_strcspn("aagggc", ""), strcspn("aagggc", ""));
+    cr_expect_eq(_strcspn("aabbbcc", "dy"), strcspn("aabbbcc", "dy"));
 }

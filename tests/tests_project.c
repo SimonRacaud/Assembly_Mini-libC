@@ -164,6 +164,10 @@ Test(strstr, t01, .init = setup, .fini = teardown)
     cr_expect_eq(_strstr("abcde", "cc"), strstr("abcde", "cc"));
     cr_expect_eq(_strstr("", "cc"), strstr("", "cc"));
     cr_expect_str_eq(_strstr("abccde", "c"), strstr("abccde", "c"));
+    cr_expect_str_eq(_strstr("abccde", ""), strstr("abccde", ""));
+    cr_expect_str_eq(_strstr("cabc", "a"), strstr("cabc", "a"));
+    cr_expect_eq(_strstr("p", "pp"), strstr("p", "pp"));
+    cr_expect_str_eq(_strstr("", ""), strstr("", ""));
 }
 
 Test(strpbrk, t01, .init = setup, .fini = teardown)
@@ -180,8 +184,6 @@ Test(strpbrk, t01, .init = setup, .fini = teardown)
 Test(strcspn, t01, .init = setup, .fini = teardown)
 {
     *(size_t **) (&_strcspn) = dlsym(lib, "strcspn");
-
-    printf("%lu \n", strcspn("zzaabbbcc", "ac"));
     cr_expect_eq(_strcspn("aabbbcc", "ac"), strcspn("aabbbcc", "ac"));
     cr_expect_eq(_strcspn("aabcc", "ac"), strcspn("aabcc", "ac"));
     cr_expect_eq(_strcspn("aabcc", "c"), strcspn("aabcc", "c"));

@@ -6,6 +6,9 @@ section .text
 
 strstr:
     mov rax, rdi
+
+    cmp BYTE [rsi], 0
+    je _end_found
 _loop:
     cmp BYTE [rax], 0
     je _end_notfound

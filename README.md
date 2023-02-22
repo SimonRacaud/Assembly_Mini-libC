@@ -35,3 +35,7 @@ __Mark:__ 20 Grade A
 # Usage
 
 `$> make`
+
+## Requirements
+
+__gcc__, __nasm__ and __ld__.

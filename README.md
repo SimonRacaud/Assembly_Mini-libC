@@ -1,5 +1,5 @@
 # Assembly_Mini-libC
-Assembly programming of C standard library functions.
+Implementation of C Standard Library functions in x86-64 assembly language.
 
 ### Example:
 ```
@@ -27,10 +27,6 @@ _end:
 ;     return dest;
 ; }
 ```
-
-# Academy
-Epitech 2nd year project.
-__Mark:__ 20 Grade A
 
 # Usage
 
